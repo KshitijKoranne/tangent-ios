@@ -14,7 +14,6 @@ final class Lexicon {
     private var exc: [String: String] = [:]     // irregular forms: mice -> mouse
     private var shards: [Int: [String: Any]] = [:]
     private var cache: [String: [Sense]] = [:]
-    private var sortedWords: [String]?
     var count: Int { tier.count }
 
     private init() {
@@ -60,15 +59,6 @@ final class Lexicon {
         }
         cache[w] = list
         return list
-    }
-
-    /// The words either side, as printed at the top of a dictionary page.
-    func neighbours(_ w: String) -> (String, String) {
-        if sortedWords == nil { sortedWords = tier.keys.sorted() }
-        let s = sortedWords!
-        var lo = 0, hi = s.count
-        while lo < hi { let m = (lo + hi) / 2; if s[m] < w { lo = m + 1 } else { hi = m } }
-        return (lo > 0 ? s[lo - 1] : "", lo + 1 < s.count ? s[lo + 1] : "")
     }
 
     /// djb2 hash, must match build.py

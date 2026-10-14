@@ -104,7 +104,7 @@ struct Related: View {
     @Environment(\.pal) private var pal
     var body: some View {
         Flow(gap: 5, leading: 6) {
-            Text(label).label(10).foregroundStyle(pal.ink3).padding(.trailing, 6)
+            Text(label).label(11).foregroundStyle(pal.ink3).padding(.trailing, 6)
             ForEach(Array(words.enumerated()), id: \.offset) { i, w in
                 HStack(alignment: .firstTextBaseline, spacing: 0) {
                     let shown = w.replacingOccurrences(of: "_", with: " ")

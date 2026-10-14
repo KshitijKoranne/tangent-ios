@@ -102,17 +102,18 @@ struct BoardView: View {
         .toolbar(removing: .title)
         .toolbar { ToolbarItem(placement: .topBarLeading) { Wordmark() }.sharedBackgroundVisibility(.hidden) }
         .refreshable { if gc.state == .ready { await gc.load() } }
+        .onAppear { if gc.state == .ready { gc.submit(store.book.count) } } // scores go up on leaving the app; this keeps the Board current while in it
     }
 
     private func you(_ r: GameCenter.Row) -> some View {
         HStack(alignment: .firstTextBaseline) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Your place").label(10).foregroundStyle(pal.ink3)
+                Text("Your place").label(11).foregroundStyle(pal.ink3)
                 Text("No. \(r.rank)").serif(40, .largeTitle, weight: .medium, italic: true).foregroundStyle(pal.ink)
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 6) {
-                Text("Words").label(10).foregroundStyle(pal.ink3)
+                Text("Words").label(11).foregroundStyle(pal.ink3)
                 Text(r.score, format: .number).serif(40, .largeTitle, weight: .medium).monospacedDigit().foregroundStyle(pal.ink)
             }
         }

@@ -6,12 +6,14 @@ struct BookView: View {
     @Environment(\.openWord) private var open
     @Environment(\.zoom) private var zoom
     @State private var q = ""
+    @AppStorage("bookRecent") private var recent = true
 
     var body: some View {
         let key = q.trimmingCharacters(in: .whitespaces).lowercased()
         let words = store.book.keys.filter { key.isEmpty || $0.contains(key) }.sorted()
-        let groups = Dictionary(grouping: words) { String($0.prefix(1)) }
-        let letters = groups.keys.sorted()
+        // Recent: one section per day, newest first. A–Z: one per letter.
+        let groups = Dictionary(grouping: words) { recent ? String(store.book[$0]?.day ?? 0) : String($0.prefix(1)) }
+        let letters = recent ? groups.keys.sorted { Int($0)! > Int($1)! } : groups.keys.sorted()
 
         Group {
             if store.book.isEmpty { empty } else {
@@ -29,15 +31,15 @@ struct BookView: View {
                         Section {
                             ForEach(groups[l] ?? [], id: \.self) { row($0) }
                         } header: {
-                            Text(l.uppercased()).serif(26, .title2, weight: .medium, italic: true).foregroundStyle(pal.ink)
+                            Text(recent ? Self.dayName(Int(l)!) : l.uppercased()).serif(26, .title2, weight: .medium, italic: true).foregroundStyle(pal.ink)
                                 .padding(.top, 14).padding(.bottom, 2)
                         }
-                        .sectionIndexLabel(l.uppercased())
+                        .sectionIndexLabel(recent ? nil : Text(l.uppercased()))
                     }
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
-                .listSectionIndexVisibility(.visible)
+                .listSectionIndexVisibility(recent ? .hidden : .visible)
                 .searchable(text: $q, prompt: "Find a word in your book")
             }
         }
@@ -57,14 +59,19 @@ struct BookView: View {
     private func row(_ w: String) -> some View {
         let f = store.book[w]
         return Button { open(w, "book.\(w)") } label: {
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
-                Text(w).serif(20, .title3).foregroundStyle(pal.ink)
-                Spacer(minLength: 8)
-                HStack(spacing: 7) {
-                    RoundedRectangle(cornerRadius: 2).fill(Palette.solid[f?.tier ?? 0]).frame(width: 7, height: 7)
-                    Text(Store.date(f?.day ?? Store.today)).label(10)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(w).serif(20, .title3).foregroundStyle(pal.ink)
+                    Spacer(minLength: 8)
+                    HStack(spacing: 7) {
+                        RoundedRectangle(cornerRadius: 2).fill(Palette.solid[f?.tier ?? 0]).frame(width: 7, height: 7)
+                        Text(recent ? Lexicon.tierNames[f?.tier ?? 0] : Store.date(f?.day ?? Store.today)).label(11)
+                    }
+                    .foregroundStyle(pal.ink3)
                 }
-                .foregroundStyle(pal.ink3)
+                if let d = Lexicon.shared.senses(w).first?.def { // the first meaning, so the book reminds as well as counts
+                    Text(d).sans(14, .subheadline).foregroundStyle(pal.ink2).lineLimit(1)
+                }
             }
             .contentShape(.rect)
         }
@@ -102,23 +109,20 @@ struct BookView: View {
                 }
             }
             HStack(spacing: 14) {
-                Button {
-                    if store.isPro { store.say("Review arrives in the next update.", 0) }
-                    else { store.openPro("Review builds short quizzes from your own book, so each word sticks.") }
-                } label: {
-                    HStack(spacing: 8) {
-                        Text("Review my words")
-                        if !store.isPro { ProTag() }
-                    }
+                Picker("Order", selection: $recent) {
+                    Text("Recent").tag(true)
+                    Text("A–Z").tag(false)
                 }
-                .buttonStyle(InkButton(compact: true))
-                .fixedSize()
+                .pickerStyle(.segmented).fixedSize()
+                Spacer(minLength: 0)
                 Text(store.best == 1 ? "Longest trail: 1 hop" : "Longest trail: \(store.best) hops")
                     .sans(13, .footnote).foregroundStyle(pal.ink3)
             }
             .padding(.top, 4)
         }
     }
+
+    static func dayName(_ d: Int) -> String { d == Store.today - 1 ? "Yesterday" : Store.date(d) }
 
     private var empty: some View {
         VStack(alignment: .leading, spacing: 18) {
@@ -161,7 +165,7 @@ struct RarityBar: View {
 
 struct ProTag: View {
     var body: some View {
-        Text("Pro").label(9).foregroundStyle(Color(hex: 0x15171C))
+        Text("Pro").label(11).foregroundStyle(Color(hex: 0x15171C))
             .padding(.horizontal, 5).frame(height: 17)
             .background(Palette.solid[3], in: .rect(cornerRadius: 4))
     }

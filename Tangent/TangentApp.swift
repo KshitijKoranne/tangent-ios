@@ -10,6 +10,7 @@ struct TangentApp: App {
 
 struct RootView: View {
     @Environment(Store.self) private var store
+    @Environment(\.scenePhase) private var phase
 
     var body: some View {
         @Bindable var store = store
@@ -32,7 +33,7 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.45), value: store.onboarded)
-        .overlay(alignment: .top) { ToastView().modifier(Themed()) }
+        .overlay(alignment: .top) { if store.sheet == nil { ToastView().modifier(Themed()) } }
         .sheet(item: $store.sheet) { s in
             Group {
                 switch s {
@@ -41,11 +42,13 @@ struct RootView: View {
                 case .pro: ProSheet()
                 }
             }
+            .overlay(alignment: .top) { ToastView() } // above the sheet, where the user is looking
             .modifier(Themed())
         }
         .sensoryFeedback(trigger: store.hapticTick) { _, _ in store.haptic }
         .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .onChange(of: GameCenter.shared.state) { _, s in if s == .ready { GameCenter.shared.submit(store.book.count) } }
+        .onChange(of: phase) { _, p in if p == .background { GameCenter.shared.submit(store.book.count) } } // one upload per session, not per word
         .task { if store.joined { GameCenter.shared.start() } } // the sign-in prompt only follows a yes to "Join the Board"
     }
 }
@@ -67,6 +70,7 @@ struct Themed: ViewModifier {
 struct ToastView: View {
     @Environment(Store.self) private var store
     @Environment(\.pal) private var pal
+    @Environment(\.accessibilityReduceMotion) private var still
 
     var body: some View {
         ZStack {
@@ -90,7 +94,7 @@ struct ToastView: View {
                 .accessibilityAddTraits(.isStaticText)
             }
         }
-        .animation(Motion.land, value: store.toast)
+        .animation(still ? .easeOut(duration: 0.2) : Motion.land, value: store.toast)
         .onChange(of: store.toast) { _, t in
             if let t { AccessibilityNotification.Announcement(t.text).post() }
         }
