@@ -69,9 +69,11 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
     var shareText: String {
         let sq = ["🟨", "🟩", "🟦", "🟪"], t = todayTrail, lex = Lexicon.shared
         let rare = t.filter { (lex.tier[$0] ?? 0) >= 2 }.count
-        return "Tangent No. \(Self.number)\n" + t.map { sq[lex.tier[$0] ?? 0] }.joined()
-            + "\n\(t.count) new \(t.count == 1 ? "word" : "words")" + (rare > 0 ? " · \(rare) rare" : "")
-            + (streak > 1 ? " · \(streak)-day streak" : "")
+        var s = "Tangent No. \(Self.number)\n" + t.map { sq[lex.tier[$0] ?? 0] }.joined()
+        s += "\n\(t.count) new " + (t.count == 1 ? "word" : "words")
+        if rare > 0 { s += " · \(rare) rare" }
+        if streak > 1 { s += " · \(streak)-day streak" }
+        return s
     }
 
     // MARK: ink — each new word costs a drop; drops refill one at a time

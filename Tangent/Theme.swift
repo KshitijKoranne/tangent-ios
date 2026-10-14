@@ -113,7 +113,7 @@ extension View {
     }
     /// Small uppercase mono label: dates, counts, section names.
     func label(_ size: CGFloat = 11) -> some View {
-        modifier(Face(max(size, 11), .caption2, .monospaced, .medium, false)) // ponytail: 11pt is the iOS floor.tracking(0.9).textCase(.uppercase)
+        modifier(Face(max(size, 11), .caption2, .monospaced, .medium, false)).tracking(0.9).textCase(.uppercase) // ponytail: 11pt is the iOS floor
     }
 }
 
