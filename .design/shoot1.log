@@ -1,0 +1,27 @@
+
+Shot 4 screen(s) at 3x -> /Users/kshitij/Desktop/Tangent/.design/shots/r1
+  /Users/kshitij/Desktop/Tangent/.design/shots/r1/1-first-open.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/r1/2-three-hops.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/r1/3-three-hops-dark.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/r1/4-board-join.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/r1/sheet.png   (the flow; open each 3x PNG above for detail)
+
+── 1-first-open ─────────────────────────────
+  fonts {"SF Pro":3,"New York":7}  sizes [40, 30, 17, 15]  weights [400, 500, 600]  hues []  cards 0
+  clean
+
+── 2-three-hops ─────────────────────────────
+  fonts {"SF Pro":5,"New York":8,"SF Mono":1}  sizes [34, 30, 17, 15, 14, 11]  weights [400, 500, 600]  hues [48, 144]  cards 0
+  warn  8 distinct left edges in the left third. Align to fewer verticals.
+
+── 3-three-hops-dark ─────────────────────────────
+  fonts {"SF Pro":5,"New York":8,"SF Mono":1}  sizes [34, 30, 17, 15, 14, 11]  weights [400, 500, 600]  hues []  cards 0
+  warn  8 distinct left edges in the left third. Align to fewer verticals.
+
+── 4-board-join ─────────────────────────────
+  fonts {"SF Mono":1,"New York":1,"SF Pro":6}  sizes [120, 17, 16, 14, 11]  weights [400, 500, 600]  hues []  cards 1
+  clean
+
+App-wide: 9 text sizes [120, 40, 34, 30, 17, 16, 15, 14, 11]
+
+No FAILs. The scan only catches mechanical tells. Now read sheet.png with your own eyes.

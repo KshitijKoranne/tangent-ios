@@ -1,0 +1,117 @@
+[
+  {
+    "name": "1-first-open",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Pro": 3,
+        "New York": 7
+      },
+      "sizes": [
+        40,
+        30,
+        17,
+        15
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 2,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "2-three-hops",
+    "fails": [],
+    "warns": [
+      "8 distinct left edges in the left third. Align to fewer verticals."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 5,
+        "New York": 8,
+        "SF Mono": 1
+      },
+      "sizes": [
+        34,
+        30,
+        17,
+        15,
+        14,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 8,
+      "accentHues": [
+        48,
+        144
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "3-three-hops-dark",
+    "fails": [],
+    "warns": [
+      "8 distinct left edges in the left third. Align to fewer verticals."
+    ],
+    "facts": {
+      "fonts": {
+        "SF Pro": 5,
+        "New York": 8,
+        "SF Mono": 1
+      },
+      "sizes": [
+        34,
+        30,
+        17,
+        15,
+        14,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 8,
+      "accentHues": [],
+      "cards": 0
+    }
+  },
+  {
+    "name": "4-board-join",
+    "fails": [],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "SF Mono": 1,
+        "New York": 1,
+        "SF Pro": 6
+      },
+      "sizes": [
+        120,
+        17,
+        16,
+        14,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 2,
+      "accentHues": [],
+      "cards": 1
+    }
+  }
+]

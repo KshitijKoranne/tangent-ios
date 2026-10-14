@@ -1,0 +1,77 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Tangent onboarding r1</title>
+<link rel="stylesheet" href="file:///Users/kshitij/.claude/skills/app-designer/assets/device.css">
+<style>
+:root{--bg:#FAF9F5;--surf:#F0EFE9;--ink:#15171C;--ink2:#4B4F58;--ink3:#666A72;--rule:#E2E1DA;--ul:#BDBCB4;
+--y:rgba(255,225,77,.85);--g:rgba(134,227,154,.85);--b:rgba(134,191,255,.85)}
+.screen[data-theme="dark"]{--bg:#111214;--surf:#1C1D21;--ink:#ECEAE4;--ink2:#B2B1AB;--ink3:#8D8D89;--rule:#2A2B30;--ul:#4A4B50;
+--y:rgba(255,225,77,.34);--g:rgba(134,227,154,.34);--b:rgba(134,191,255,.34);color:var(--ink)}
+.screen{background:var(--bg);color:var(--ink);font-family:var(--sf)}
+.col{position:absolute;inset:var(--safe-top) 24px var(--safe-bottom);display:flex;flex-direction:column}
+.top{display:flex;justify-content:flex-end;align-items:center;height:44px}
+.ink{display:flex;gap:5px;align-items:center;font:500 15px var(--sf);font-variant-numeric:tabular-nums}
+.ink svg path{fill:var(--ink)}
+.h{font:500 40px/1.04 var(--ny);letter-spacing:-1.2px;margin:22px 0 0}
+.h em{font-style:italic;background:linear-gradient(var(--y),var(--y)) 0 62%/100% 74% no-repeat;padding:0 6px;margin:0 -6px}
+.sent{font:400 30px/1.32 var(--ny);letter-spacing:-.4px;margin:0}
+.sent u{text-decoration:underline;text-decoration-color:var(--ul);text-decoration-thickness:1.5px;text-underline-offset:5px}
+.band{border-radius:5px;padding:0 4px;margin:0 -4px;background:var(--y)}.band.g{background:var(--g)}
+.cta{margin-top:auto;height:54px;border-radius:27px;background:var(--ink);color:var(--bg);font:600 17px/54px var(--sf);text-align:center}
+.cta.off{background:var(--surf);color:var(--ink3)}
+.lab{font:500 11px var(--sf-mono);letter-spacing:.9px;text-transform:uppercase;color:var(--ink3)}
+.note{font:15px/1.4 var(--sf);color:var(--ink2);margin:0}
+.trail{position:relative;margin-top:10px;flex:1}
+.trail svg{position:absolute;left:0;top:0;overflow:visible}
+.trail path,.trail line{stroke:var(--ink)}.trail circle{fill:var(--ink)}
+.node{position:absolute;right:0}
+.node .w{font:italic 500 34px/1.1 var(--ny);letter-spacing:-.4px}
+.node .d{font:14px/1.35 var(--sf);color:var(--ink2);margin-top:6px}
+.glassbar{position:absolute;left:24px;right:24px;bottom:30px;height:62px;border-radius:31px;display:flex;justify-content:space-around;align-items:center;font:500 11px var(--sf);color:var(--ink3)}
+.big{font:500 120px/1 var(--ny);letter-spacing:-5px;font-variant-numeric:tabular-nums;margin:0}
+</style></head><body>
+
+<section class="screen" data-name="1-first-open"><div class="col">
+ <div class="top"><span class="ink"><svg width="11" height="15" viewBox="0 0 11 15"><path d="M5.5 0C5.5 0 0 6.2 0 9.6a5.5 5.5 0 0 0 11 0C11 6.2 5.5 0 5.5 0z"/></svg>10</span></div>
+ <h1 class="h">Start anywhere. Wander <em>everywhere.</em></h1>
+ <p class="sent" style="margin-top:34px">The <u>lighthouse</u> <u>keeper</u> <u>counted</u> every <u>wave</u>.</p>
+ <p class="note" style="margin-top:26px">Tap an underlined word. It's a dictionary, after all.</p>
+ <div class="cta off">Find two words</div>
+</div></section>
+
+<section class="screen" data-name="2-three-hops"><div class="col">
+ <div class="top"><span class="ink"><svg width="11" height="15" viewBox="0 0 11 15"><path d="M5.5 0C5.5 0 0 6.2 0 9.6a5.5 5.5 0 0 0 11 0C11 6.2 5.5 0 5.5 0z"/></svg>7</span></div>
+ <p class="sent" style="margin-top:6px">The <span class="band">lighthouse</span> <u>keeper</u> <u>counted</u> every <u>wave</u>.</p>
+ <div class="trail">
+  <svg width="354" height="560" viewBox="0 0 354 560"><path d="M52 0 C 52 36, 14 50, 14 104 C 14 170, 44 188, 44 240 C 44 300, 78 318, 78 372 C 78 440, 220 470, 420 440" fill="none" stroke-width="1.6" stroke-linecap="round"/>
+   <circle cx="14" cy="104" r="5"/><circle cx="44" cy="240" r="5"/><circle cx="78" cy="372" r="5"/></svg>
+  <div class="node" style="left:40px;top:80px"><span class="w"><span class="band">tower</span></span><div class="d">a structure taller than its diameter</div></div>
+  <div class="node" style="left:70px;top:216px"><span class="w"><span class="band">beacon</span></span><div class="d">a fire or light set up to guide</div></div>
+  <div class="node" style="left:104px;top:348px"><span class="w"><span class="band g">pharos</span></span><div class="lab" style="margin-top:8px">Uncommon</div></div>
+ </div>
+ <p class="note" style="margin:0 0 14px">Three words in your book. Tap on.</p>
+ <div class="cta" style="margin-top:0">Start wandering</div>
+</div></section>
+
+<section class="screen" data-theme="dark" data-name="3-three-hops-dark"><div class="col">
+ <div class="top"><span class="ink"><svg width="11" height="15" viewBox="0 0 11 15"><path d="M5.5 0C5.5 0 0 6.2 0 9.6a5.5 5.5 0 0 0 11 0C11 6.2 5.5 0 5.5 0z"/></svg>7</span></div>
+ <p class="sent" style="margin-top:6px">The <span class="band">lighthouse</span> <u>keeper</u> <u>counted</u> every <u>wave</u>.</p>
+ <div class="trail">
+  <svg width="354" height="560" viewBox="0 0 354 560"><path d="M52 0 C 52 36, 14 50, 14 104 C 14 170, 44 188, 44 240 C 44 300, 78 318, 78 372 C 78 440, 220 470, 420 440" fill="none" stroke-width="1.6" stroke-linecap="round"/>
+   <circle cx="14" cy="104" r="5"/><circle cx="44" cy="240" r="5"/><circle cx="78" cy="372" r="5"/></svg>
+  <div class="node" style="left:40px;top:80px"><span class="w"><span class="band">tower</span></span><div class="d">a structure taller than its diameter</div></div>
+  <div class="node" style="left:70px;top:216px"><span class="w"><span class="band">beacon</span></span><div class="d">a fire or light set up to guide</div></div>
+  <div class="node" style="left:104px;top:348px"><span class="w"><span class="band g">pharos</span></span><div class="lab" style="margin-top:8px">Uncommon</div></div>
+ </div>
+ <p class="note" style="margin:0 0 14px">Three words in your book. Tap on.</p>
+ <div class="cta" style="margin-top:0">Start wandering</div>
+</div></section>
+
+<section class="screen" data-name="4-board-join"><div class="col">
+ <div class="top"></div>
+ <span class="lab" style="margin-top:14px">Board · most words found</span>
+ <p class="big" style="margin-top:34px">63</p>
+ <p class="note" style="margin-top:12px;font-size:17px;max-width:280px">words in your book. See where they rank against players everywhere.</p>
+ <div class="cta" style="margin-top:34px;width:230px;height:50px;line-height:50px;border-radius:25px;font-size:16px">Join the Board</div>
+ <p class="note" style="margin-top:14px;font-size:14px;color:var(--ink3)">Signs in with Game Center. You can skip it and keep wandering.</p>
+ <div class="glassbar glass" data-float><span>Wander</span><span>Book</span><span style="color:var(--ink)">Board</span></div>
+</div></section>
+<script src="file:///Users/kshitij/.claude/skills/app-designer/assets/device.js"></script></body></html>

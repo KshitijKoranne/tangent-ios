@@ -1,0 +1,25 @@
+
+Shot 3 screen(s) at 3x -> /Users/kshitij/Desktop/Tangent/.design/shots/explore
+  /Users/kshitij/Desktop/Tangent/.design/shots/explore/01-a-live-page.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/explore/02-b-the-tangent.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/explore/03-c-margin-entries.png
+  /Users/kshitij/Desktop/Tangent/.design/shots/explore/sheet.png   (the flow; open each 3x PNG above for detail)
+
+── a-live-page ─────────────────────────────
+  fonts {"New York":13,"SF Pro":2,"SF Mono":2}  sizes [40, 28, 22, 18, 17, 15, 11, 10]  weights [400, 500, 600]  hues [336, 48]  cards 1
+  FAIL  Text below 11pt (iOS floor): 10px "Common"
+  FAIL  Contrast below WCAG on solid ground: 1.90:1 22px "."; 4.37:1 11px "Hop 2"; 4.37:1 18px "noun"
+
+── b-the-tangent ─────────────────────────────
+  fonts {"New York":10,"SF Pro":5,"SF Mono":1}  sizes [34, 30, 22, 17, 15, 14, 11]  weights [400, 500, 600]  hues [336, 48, 144]  cards 0
+  FAIL  Contrast below WCAG on solid ground: 1.90:1 22px "."
+  warn  Three saturated hue families (336°, 48°, 144°). Is each one earning its place?
+
+── c-margin-entries ─────────────────────────────
+  fonts {"New York":15,"SF Pro":3,"SF Mono":3}  sizes [64, 32, 28, 22, 17, 15, 11]  weights [400, 500, 600]  hues [336, 48, 144]  cards 0
+  FAIL  Contrast below WCAG on solid ground: 1.90:1 22px "."
+  warn  Three saturated hue families (336°, 48°, 144°). Is each one earning its place?
+
+App-wide: 13 text sizes [64, 40, 34, 32, 30, 28, 22, 18, 17, 15, 14, 11, 10]  warn: a type scale this long is not a scale. Merge sizes a step apart.
+
+4 FAIL(s). The scan only catches mechanical tells. Now read sheet.png with your own eyes.

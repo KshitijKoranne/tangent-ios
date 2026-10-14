@@ -1,0 +1,112 @@
+[
+  {
+    "name": "a-live-page",
+    "fails": [
+      "Text below 11pt (iOS floor): 10px \"Common\"",
+      "Contrast below WCAG on solid ground: 1.90:1 22px \".\"; 4.37:1 11px \"Hop 2\"; 4.37:1 18px \"noun\""
+    ],
+    "warns": [],
+    "facts": {
+      "fonts": {
+        "New York": 13,
+        "SF Pro": 2,
+        "SF Mono": 2
+      },
+      "sizes": [
+        40,
+        28,
+        22,
+        18,
+        17,
+        15,
+        11,
+        10
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336,
+        48
+      ],
+      "cards": 1
+    }
+  },
+  {
+    "name": "b-the-tangent",
+    "fails": [
+      "Contrast below WCAG on solid ground: 1.90:1 22px \".\""
+    ],
+    "warns": [
+      "Three saturated hue families (336°, 48°, 144°). Is each one earning its place?"
+    ],
+    "facts": {
+      "fonts": {
+        "New York": 10,
+        "SF Pro": 5,
+        "SF Mono": 1
+      },
+      "sizes": [
+        34,
+        30,
+        22,
+        17,
+        15,
+        14,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 3,
+      "accentHues": [
+        336,
+        48,
+        144
+      ],
+      "cards": 0
+    }
+  },
+  {
+    "name": "c-margin-entries",
+    "fails": [
+      "Contrast below WCAG on solid ground: 1.90:1 22px \".\""
+    ],
+    "warns": [
+      "Three saturated hue families (336°, 48°, 144°). Is each one earning its place?"
+    ],
+    "facts": {
+      "fonts": {
+        "New York": 15,
+        "SF Pro": 3,
+        "SF Mono": 3
+      },
+      "sizes": [
+        64,
+        32,
+        28,
+        22,
+        17,
+        15,
+        11
+      ],
+      "weights": [
+        "400",
+        "500",
+        "600"
+      ],
+      "leftEdges": 4,
+      "accentHues": [
+        336,
+        48,
+        144
+      ],
+      "cards": 0
+    }
+  }
+]
