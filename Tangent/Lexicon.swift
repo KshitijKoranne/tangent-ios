@@ -14,7 +14,6 @@ final class Lexicon {
     private var exc: [String: String] = [:]     // irregular forms: mice -> mouse
     private var shards: [Int: [String: Any]] = [:]
     private var cache: [String: [Sense]] = [:]
-    private var sortedWords: [String]?
     var count: Int { tier.count }
 
     private init() {
@@ -60,15 +59,6 @@ final class Lexicon {
         }
         cache[w] = list
         return list
-    }
-
-    /// The words either side, as printed at the top of a dictionary page.
-    func neighbours(_ w: String) -> (String, String) {
-        if sortedWords == nil { sortedWords = tier.keys.sorted() }
-        let s = sortedWords!
-        var lo = 0, hi = s.count
-        while lo < hi { let m = (lo + hi) / 2; if s[m] < w { lo = m + 1 } else { hi = m } }
-        return (lo > 0 ? s[lo - 1] : "", lo + 1 < s.count ? s[lo + 1] : "")
     }
 
     /// djb2 hash, must match build.py
@@ -117,5 +107,75 @@ final class Lexicon {
         "The beekeeper moved slowly, trusting the swarm to recognise her calm.",
         "An abandoned railway station still announces trains that never arrive.",
         "The detective noticed the muddy boots, the wet umbrella and the nervous smile.",
+        "A tram rattled past the bakery and the whole window of loaves trembled.",
+        "The archivist wore cotton gloves to turn pages older than the city itself.",
+        "Rain gathered in the gutters and carried a paper boat towards the sea.",
+        "The cobbler's shop smelled of leather, polish and patient afternoons.",
+        "A heron stood in the shallows like a question nobody had answered.",
+        "The orchard keeper wrapped each young tree in burlap before the first frost.",
+        "Somebody left a piano on the pier, and strangers took turns to play it.",
+        "The cartographer drew the coastline twice because the tide kept changing her mind.",
+        "Steam curled from the teapot while the cards were dealt in silence.",
+        "A kite tugged at its string as if it remembered being a bird.",
+        "The stonemason carved his initials where only the gargoyles would see them.",
+        "Fireflies blinked above the paddy fields like a slow and gentle code.",
+        "The ferryman knew every current of the river by the colour of the water.",
+        "A bookshop cat slept on the poetry shelf and nobody dared to move her.",
+        "The chemist mixed two clear liquids and the beaker blushed a sudden crimson.",
+        "Lanterns floated down the canal, each one carrying somebody's quiet wish.",
+        "The blacksmith quenched the blade and the forge hissed like an angry dragon.",
+        "A shepherd counted his flock at dusk and always came up one short.",
+        "The weaver threaded indigo through the loom until the cloth looked like evening.",
+        "Pebbles on the beach had been polished smooth by centuries of restless waves.",
+        "The conductor raised his baton and the whole hall seemed to inhale.",
+        "A sparrow built its nest inside the letter O of the old cinema sign.",
+        "The geologist split the rock and found a tiny fern pressed inside it.",
+        "Her diary had a lock, but the key hung openly on a ribbon beside it.",
+        "The night train hummed through villages whose names nobody on board could pronounce.",
+        "A gardener whistled to the tomatoes, convinced that they grew faster for it.",
+        "The clock tower was ten minutes slow, and the whole town politely agreed.",
+        "Wind combed the wheat into long golden waves that never reached the shore.",
+        "The magician's rabbit had quietly retired and now lived in a hatbox.",
+        "An old sailor tied knots for children and named each one after a storm.",
+        "The surveyor's compass spun wildly near the iron hills, refusing to choose.",
+        "Pigeons strutted across the square like magistrates inspecting a market.",
+        "The calligrapher waited for her ink to settle before the first stroke.",
+        "A canoe slid through the mangroves where the roots knelt into the water.",
+        "The botanist pressed a violet between the pages of a borrowed encyclopaedia.",
+        "Snow muffled the city until even the traffic seemed to whisper.",
+        "The goldsmith weighed the ring on a balance so delicate it trembled at breath.",
+        "A street vendor fanned the coals and the smell of roasting corn drifted uptown.",
+        "The puppeteer's hands vanished into shadow and the marionettes began to dance.",
+        "Dew clung to the spider's web, turning a trap into a chandelier.",
+        "The cellist rested her cheek on the instrument as though it might confide in her.",
+        "A camel caravan crossed the dunes, following stars older than any map.",
+        "The printer set each letter backwards so the page would read the right way.",
+        "An owl watched the farmhouse from the barn roof, unblinking and unimpressed.",
+        "The lifeguard read a novel between glances at the restless swimmers.",
+        "Copper pans hung in the kitchen like a row of small and polished moons.",
+        "The explorer's journal ended mid-sentence, and the rest of the page was blank.",
+        "A gust of wind stole the umbrella and carried it proudly over the rooftops.",
+        "The glassblower turned a molten bead into a swan before the crowd could blink.",
+        "Tea pickers moved along the slopes, their baskets filling with green.",
+        "The judge adjusted her spectacles and the courtroom held its breath.",
+        "A lighthouse beam swept across the bay, counting ships the way it always had.",
+        "The baker's apprentice burned the first batch and learned more than any recipe could teach.",
+        "Bats poured from the cave at dusk like smoke from a hidden chimney.",
+        "The tailor's mannequin wore a different hat each day, and the street noticed.",
+        "A sunflower turned its heavy face to follow the afternoon across the field.",
+        "The jeweller held the opal to the light and a small storm moved inside it.",
+        "Waves erased the sandcastle slowly, as though they were sorry to do it.",
+        "The mapmaker's apprentice added a dragon simply because the corner looked empty.",
+        "A bicycle bell rang twice and the whole flock of geese stepped aside.",
+        "The monk swept the courtyard every morning, though the leaves always returned.",
+        "Embers drifted upward from the bonfire and joined the scattered constellations.",
+        "The ice cream van played its tune slightly out of key all summer long.",
+        "A pearl diver surfaced, gasped once, and smiled at the gift in her palm.",
+        "The architect sketched a bridge on a napkin that later crossed a river.",
+        "Crickets tuned their instruments in the long grass as the porch light flickered.",
+        "The postman knew which dogs to greet and which gates to approach with caution.",
+        "An avalanche of laughter tumbled out of the classroom when the bell rang.",
+        "The violin maker tapped the spruce and listened for the music trapped inside.",
+        "Moonlight silvered the rooftops, and somewhere a window opened to let it in.",
     ]
 }

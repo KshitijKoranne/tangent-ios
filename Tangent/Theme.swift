@@ -26,22 +26,22 @@ struct Palette {
         switch (s, scheme) {
         case (.paper, .dark):
             return .init(bg: .init(hex: 0x111214), surface: .init(hex: 0x1C1D21), ink: .init(hex: 0xECEAE4), ink2: .init(hex: 0xB2B1AB),
-                         ink3: .init(hex: 0x7C7C79), rule: .init(hex: 0x2A2B30), hl: hl(0.32))
+                         ink3: .init(hex: 0x868684), rule: .init(hex: 0x2A2B30), hl: hl(0.32))
         case (.paper, _):
             return .init(bg: .init(hex: 0xFAF9F5), surface: .init(hex: 0xF0EFE9), ink: .init(hex: 0x15171C), ink2: .init(hex: 0x4B4F58),
-                         ink3: .init(hex: 0x868A92), rule: .init(hex: 0xE2E1DA), hl: hl(0.8))
+                         ink3: .init(hex: 0x686B71), rule: .init(hex: 0xE2E1DA), hl: hl(0.8))
         case (.blueprint, _):
             return .init(bg: .init(hex: 0x1A3862), surface: .init(hex: 0x21457A), ink: .init(hex: 0xEAF2FF), ink2: .init(hex: 0xB8CAE6),
-                         ink3: .init(hex: 0x86A0C6), rule: .init(hex: 0x2F5589), hl: hl(0.38), pattern: .grid)
+                         ink3: .init(hex: 0xA2B6D3), rule: .init(hex: 0x2F5589), hl: hl(0.30), pattern: .grid)
         case (.library, _):
             return .init(bg: .init(hex: 0x17231C), surface: .init(hex: 0x213027), ink: .init(hex: 0xF0E9D8), ink2: .init(hex: 0xC7BFAA),
-                         ink3: .init(hex: 0x948F7C), rule: .init(hex: 0x2D3E34), hl: hl(0.32), pattern: .glow)
+                         ink3: .init(hex: 0x999583), rule: .init(hex: 0x2D3E34), hl: hl(0.32), pattern: .glow)
         case (.riso, _):
             return .init(bg: .init(hex: 0xFFFDFB), surface: .init(hex: 0xF1EFF9), ink: .init(hex: 0x2430C2), ink2: .init(hex: 0x4B54C6),
-                         ink3: .init(hex: 0x8B90D3), rule: .init(hex: 0xDDDDF2), hl: hl(0.8), pattern: .dots)
+                         ink3: .init(hex: 0x646797), rule: .init(hex: 0xDDDDF2), hl: hl(0.8), pattern: .dots)
         case (.chalk, _):
             return .init(bg: .init(hex: 0x252B28), surface: .init(hex: 0x2F3733), ink: .init(hex: 0xF2F3EE), ink2: .init(hex: 0xC5C9C0),
-                         ink3: .init(hex: 0x939A91), rule: .init(hex: 0x3A433E), hl: hl(0.32), pattern: .chalk)
+                         ink3: .init(hex: 0x9BA199), rule: .init(hex: 0x3A433E), hl: hl(0.32), pattern: .chalk)
         }
     }
 }
@@ -113,7 +113,7 @@ extension View {
     }
     /// Small uppercase mono label: dates, counts, section names.
     func label(_ size: CGFloat = 11) -> some View {
-        modifier(Face(size, .caption2, .monospaced, .medium, false)).tracking(0.9).textCase(.uppercase)
+        modifier(Face(max(size, 11), .caption2, .monospaced, .medium, false)).tracking(0.9).textCase(.uppercase) // ponytail: 11pt is the iOS floor
     }
 }
 

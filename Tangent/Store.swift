@@ -6,7 +6,7 @@ struct Ink: Codable { var level: Double; var at: Date }
 enum Visit: Hashable { case fresh, owned, dry }
 
 /// One page on the trail. `src` is the word the page grew out of (for the zoom transition).
-struct Hop: Hashable { let word: String; let src: String; var visit: Visit }
+struct Hop: Hashable { let word: String; let src: String; var visit: Visit; var depth: Int }
 
 struct Toast: Equatable, Identifiable { let id = UUID(); let text: String; let tier: Int; var seconds = 2.8 }
 
@@ -23,6 +23,8 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
     var onboarded = false
     var scratch = false           // the onboarding practice store: never written to disk
     var joined = false            // said yes to the Board (Game Center); the sign-in prompt only ever follows a yes
+    var trail: [String] = []      // words found today, in order: today's card and the share text
+    var trailDay = 0
 
     // session state
     var tab = 0
@@ -35,21 +37,54 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
     var dryTold = false
 
     static let paywallAt = 50
+    #if DEBUG
+    static let sells = true
+    #else
+    static let sells = false // ponytail: flip when StoreKit products exist in App Store Connect
+    #endif
     static let milestones: Set = [10, 25, 100, 250, 500, 1000, 2500, 5000]
 
     /// Local calendar day number, so the sentence changes at the user's midnight.
-    static var today: Int { Int((Date.now.timeIntervalSince1970 + Double(TimeZone.current.secondsFromGMT())) / 86_400) }
-    static var sentence: String { Lexicon.seeds[today % Lexicon.seeds.count] }
+    static var today: Int { day(.now) }
+    static func day(_ d: Date) -> Int { Int((d.timeIntervalSince1970 + Double(TimeZone.current.secondsFromGMT(for: d))) / 86_400) }
+    /// Day 1 is launch day. The stride walks all seeds in an order that does not line up with the calendar.
+    static let launch = 20_740 // 14 Oct 2026
+    static var number: Int { max(1, today - launch + 1) }
+    static func sentence(_ day: Int = today) -> String { Lexicon.seeds[(day * 37) % Lexicon.seeds.count] } // ponytail: 37 is coprime with 100 seeds
 
     var shownSkin: Skin { trySkin ?? skin }
     var foundToday: Int { let d = Self.today; return book.values.lazy.filter { $0.day == d }.count }
     var tierCounts: [Int] { book.values.reduce(into: [0, 0, 0, 0]) { $0[$1.tier] += 1 } }
+    var todayTrail: [String] { trailDay == Self.today ? trail : [] }
+
+    /// Days in a row with at least one find. Today still counts as alive until midnight.
+    var streak: Int {
+        let days = Set(book.values.map(\.day))
+        var d = days.contains(Self.today) ? Self.today : Self.today - 1, n = 0
+        while days.contains(d) { n += 1; d -= 1 }
+        return n
+    }
+
+    /// Wordle-style result: squares by rarity, no words, so the trail stays a surprise.
+    var shareText: String {
+        let sq = ["🟨", "🟩", "🟦", "🟪"], t = todayTrail, lex = Lexicon.shared
+        let rare = t.filter { (lex.tier[$0] ?? 0) >= 2 }.count
+        var s = "Tangent No. \(Self.number)\n" + t.map { sq[lex.tier[$0] ?? 0] }.joined()
+        s += "\n\(t.count) new " + (t.count == 1 ? "word" : "words")
+        if rare > 0 { s += " · \(rare) rare" }
+        if streak > 1 { s += " · \(streak)-day streak" }
+        return s
+    }
 
     // MARK: ink — each new word costs a drop; drops refill one at a time
 
     var cap: Double { isPro ? 30 : 10 }
     var refill: TimeInterval { isPro ? 12 * 60 : 24 * 60 }
-    func inkNow(_ now: Date = .now) -> Double { min(cap, ink.level + now.timeIntervalSince(ink.at) / refill) }
+    /// The inkwell is full again at local midnight, with the new sentence.
+    func inkNow(_ now: Date = .now) -> Double {
+        if Self.day(ink.at) < Self.day(now) { return cap }
+        return min(cap, max(0, ink.level + max(0, now.timeIntervalSince(ink.at)) / refill)) // clock set back: no negative ink
+    }
     func nextDrop(_ now: Date = .now) -> TimeInterval {
         let n = inkNow(now)
         return n >= cap ? 0 : (1 - n.truncatingRemainder(dividingBy: 1)) * refill
@@ -68,24 +103,36 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
         if book[w] != nil { feel(.selection); return .owned }
         guard spend() else {
             feel(.warning)
-            if !dryTold { dryTold = true; say("Out of ink. Keep reading. New words wait for the next drop in \(Self.dur(nextDrop())).", 3, 4.2) }
+            if !dryTold {
+                dryTold = true
+                if Self.sells, !proSeen, !isPro { later { self.openPro("Out of ink. Pro holds 30 drops, and each one refills twice as fast.") } }
+                else { say("Out of ink. Keep reading. New words wait for the next drop in \(Self.dur(nextDrop())).", 0, 4.2) }
+            }
             save(); return .dry
         }
         let t = Lexicon.shared.tier[w] ?? 0
         book[w] = Found(day: Self.today, tier: t)
+        if trailDay != Self.today { trail = []; trailDay = Self.today }
+        trail.append(w)
         feel(t >= 2 ? .success : .impact(flexibility: .soft, intensity: 0.7))
-        if t == 2 { say("Rare find. “\(w)” turns up about once in a million words.", 2) }
-        if t == 3 { say("Obscure find. “\(w)” turns up less than once in ten million words.", 3, 3.6) }
-        if Self.milestones.contains(book.count) { say("\(book.count) words in your book.", 0) }
-        if book.count == Self.paywallAt, !proSeen {
-            Task { try? await Task.sleep(for: .seconds(1.6)); self.openPro("You've found \(Self.paywallAt) words. Pro helps you keep them.") }
-        }
+        if Self.milestones.contains(book.count) { say("\(book.count) words in your book.", t) }
+        else if t == 2 { say("Rare find. “\(w)” turns up about once in a million words.", 2) }
+        else if t == 3 { say("Obscure find. “\(w)” turns up less than once in ten million words.", 3, 3.6) }
+        else if trail.count == 1, streak > 1 { say("Day \(streak) in a row. Fresh sentence, full inkwell.", 0) }
+        if Self.sells, book.count == Self.paywallAt, !proSeen, !isPro { later { self.openPro("You've found \(Self.paywallAt) words. Pro lets you find three times as many each day.") } }
         save()
-        if !scratch { GameCenter.shared.submit(book.count) }
         return .fresh
     }
 
-    func openPro(_ line: String? = nil) { proLine = line; proSeen = true; sheet = .pro; save() }
+    /// Opens the paywall after the page lands, and never on top of another sheet.
+    private func later(_ f: @escaping () -> Void) {
+        Task { try? await Task.sleep(for: .seconds(1.6)); if self.sheet == nil { f() } }
+    }
+
+    func openPro(_ line: String? = nil) {
+        guard Self.sells else { say("Pro opens with a later update. Everything here is free until then.", 0, 3.6); return }
+        proLine = line; proSeen = true; sheet = .pro; save()
+    }
 
     func setPro(_ on: Bool) { // ponytail: preview switch until StoreKit products exist in App Store Connect
         let n = inkNow(); isPro = on
@@ -110,15 +157,23 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
 
     // MARK: saving
 
-    private struct Saved: Codable { var book: [String: Found]; var best: Int; var ink: Ink; var isPro: Bool; var skin: Skin; var proSeen: Bool; var onboarded: Bool?; var joined: Bool? }
+    // New fields must be optional, so an older file still decodes.
+    private struct Saved: Codable { var book: [String: Found]; var best: Int; var ink: Ink; var isPro: Bool; var skin: Skin?; var proSeen: Bool; var onboarded: Bool?; var joined: Bool?; var trail: [String]?; var trailDay: Int? }
 
     /// An empty store that is never saved. The onboarding uses it so tapped words light up without touching the real book.
-    static func blank() -> Store { let s = Store(); s.book = [:]; s.scratch = true; return s }
+    static func blank() -> Store { Store(scratch: true) }
     private static let url = URL.documentsDirectory.appending(path: "tangent.json")
 
-    init() {
-        if let d = try? Data(contentsOf: Self.url), let s = try? JSONDecoder().decode(Saved.self, from: d) {
-            book = s.book; best = s.best; ink = s.ink; isPro = s.isPro; skin = s.isPro ? s.skin : .paper; proSeen = s.proSeen; onboarded = s.onboarded ?? false; joined = s.joined ?? false
+    init(scratch: Bool = false) {
+        self.scratch = scratch
+        guard !scratch else { return }
+        if let d = try? Data(contentsOf: Self.url) {
+            if let s = try? JSONDecoder().decode(Saved.self, from: d) {
+                book = s.book; best = s.best; ink = s.ink; isPro = s.isPro; skin = s.isPro ? s.skin ?? .paper : .paper; proSeen = s.proSeen
+                onboarded = s.onboarded ?? false; joined = s.joined ?? false; trail = s.trail ?? []; trailDay = s.trailDay ?? 0
+            } else { // never overwrite a book we could not read: keep a copy first
+                try? d.write(to: URL.documentsDirectory.appending(path: "tangent-\(Int(Date.now.timeIntervalSince1970)).bak.json"))
+            }
         }
         #if DEBUG
         Demo.apply(self)
@@ -127,7 +182,7 @@ enum Sheet: String, Identifiable { case ink, themes, pro; var id: String { rawVa
 
     func save() {
         guard !scratch else { return }
-        let s = Saved(book: book, best: best, ink: ink, isPro: isPro, skin: skin, proSeen: proSeen, onboarded: onboarded, joined: joined)
+        let s = Saved(book: book, best: best, ink: ink, isPro: isPro, skin: skin, proSeen: proSeen, onboarded: onboarded, joined: joined, trail: trail, trailDay: trailDay)
         try? JSONEncoder().encode(s).write(to: Self.url, options: .atomic)
     }
 }

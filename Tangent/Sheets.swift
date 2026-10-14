@@ -14,7 +14,7 @@ struct InkSheet: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 22) {
                         Text("Ink").serif(38, .largeTitle, weight: .medium, italic: true).foregroundStyle(pal.ink)
-                        Text("Each new word you add to your book uses one drop. Reading is always free, so you can open any word at any time.")
+                        Text("Each new word you add to your book uses one drop. Reading is always free, so you can open any word at any time. At midnight the inkwell is full again, with a new sentence.")
                             .sans(15, .subheadline).foregroundStyle(pal.ink2).fixedSize(horizontal: false, vertical: true)
                             .padding(.top, -12)
 
@@ -35,12 +35,11 @@ struct InkSheet: View {
                         Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 11) {
                             GridRow {
                                 Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
-                                Text("Free").label(10).foregroundStyle(pal.ink3).gridColumnAlignment(.trailing)
-                                Text("Pro").label(10).foregroundStyle(pal.ink3).gridColumnAlignment(.trailing)
+                                Text("Free").label(11).foregroundStyle(pal.ink3).gridColumnAlignment(.trailing)
+                                Text("Pro").label(11).foregroundStyle(pal.ink3).gridColumnAlignment(.trailing)
                             }
                             planRow("Inkwell", "10 drops", "30 drops")
                             planRow("One drop refills in", "24 min", "12 min")
-                            planRow("Most words a day", "about 60", "about 150")
                         }
                         .sans(15, .subheadline).monospacedDigit()
 
@@ -63,7 +62,7 @@ struct InkSheet: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(v).serif(22, .title3, weight: .medium).monospacedDigit().foregroundStyle(pal.ink)
                 .contentTransition(.numericText())
-            Text(l).label(10).foregroundStyle(pal.ink3)
+            Text(l).label(11).foregroundStyle(pal.ink3)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(14)
@@ -145,7 +144,7 @@ struct ThemesSheet: View {
                 HStack {
                     Text(k.name).sans(15, weight: .medium).foregroundStyle(pal.ink)
                     Spacer()
-                    if k.isFree { Text("Free").label(9).foregroundStyle(pal.ink3) } else if !store.isPro { ProTag() }
+                    if k.isFree { Text("Free").label(11).foregroundStyle(pal.ink3) } else if !store.isPro { ProTag() }
                 }
                 .padding(.horizontal, 2)
             }
@@ -161,6 +160,7 @@ struct ProSheet: View {
     @Environment(Store.self) private var store
     @Environment(\.pal) private var pal
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var still
     @State private var plan = Plan.year
     @State private var swipe: CGFloat = 0
 
@@ -187,24 +187,28 @@ struct ProSheet: View {
                 VStack(alignment: .leading, spacing: 26) {
                     VStack(alignment: .leading, spacing: 12) {
                         VStack(alignment: .leading, spacing: 0) {
-                            Text("Keep the words")
-                            Text("you find.").band(pal.hl[3], swipe)
+                            Text("Wander")
+                            Text("further.").band(pal.hl[3], swipe)
                         }
                         .serif(40, .largeTitle, weight: .medium, italic: true).foregroundStyle(pal.ink)
-                        Text(store.proLine ?? "Tangent Pro turns your book into words you actually remember.")
+                        Text(store.proLine ?? "Pro gives you three times the ink and every theme.")
                             .sans(16, .callout).foregroundStyle(pal.ink2).fixedSize(horizontal: false, vertical: true)
                     }
 
                     VStack(alignment: .leading, spacing: 18) {
                         feature("drop.fill", nil, "3× the ink", "Hold 30 drops instead of 10, and each drop refills twice as fast.")
-                        feature("rectangle.on.rectangle.angled", 0, "Review", "Short quizzes built from your own book, spaced out so each word sticks.")
-                        feature("leaf", 1, "Word origins", "Where each word came from and what it first meant.")
-                        feature("waveform", 2, "Natural voice", "Hear every word said by a real narrator.")
                         feature("paintpalette", 3, "Themes", "Blueprint, Library, Riso and Chalk.")
                     }
 
+                    // Only what ships is sold. What is planned is named as planned, at no extra cost.
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Coming to Pro").label(11).foregroundStyle(pal.ink3)
+                        Text("Review quizzes from your own book, word origins, and a natural voice. Included when they arrive.")
+                            .sans(14, .subheadline).foregroundStyle(pal.ink2).fixedSize(horizontal: false, vertical: true)
+                    }
+
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Choose a plan").label(10).foregroundStyle(pal.ink3)
+                        Text("Choose a plan").label(11).foregroundStyle(pal.ink3)
                         ForEach(Plan.allCases) { planRow($0) }
                     }
 
@@ -232,7 +236,7 @@ struct ProSheet: View {
         }
         .presentationDetents([.large])
         .sensoryFeedback(.selection, trigger: plan)
-        .onAppear { withAnimation(Motion.swipe.delay(0.35)) { swipe = 1 } }
+        .onAppear { if still { swipe = 1 } else { withAnimation(Motion.swipe.delay(0.35)) { swipe = 1 } } }
         .onDisappear {
             if let t = store.trySkin, store.isPro { store.skin = t; store.save() }
             store.trySkin = nil
@@ -284,7 +288,7 @@ struct ProSheet: View {
             .overlay(RoundedRectangle(cornerRadius: 16).strokeBorder(on ? pal.ink : pal.rule, lineWidth: on ? 1.5 : 1))
             .overlay(alignment: .topTrailing) {
                 if p == .year {
-                    Text("Best value").label(9).foregroundStyle(Color(hex: 0x15171C))
+                    Text("Best value").label(11).foregroundStyle(Color(hex: 0x15171C))
                         .padding(.horizontal, 6).frame(height: 18)
                         .background(Palette.solid[0], in: .rect(cornerRadius: 4))
                         .offset(x: -14, y: -9)

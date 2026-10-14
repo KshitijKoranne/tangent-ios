@@ -50,7 +50,10 @@ struct OnboardingView: View {
 
     private var header: some View {
         HStack {
-            if trail.count < 2 { Button("Skip") { finish() }.sans(15, .subheadline).foregroundStyle(pal.ink3) }
+            if trail.count < 2 {
+                Button { finish() } label: { Text("Skip").frame(minWidth: 44, minHeight: 44, alignment: .leading).contentShape(.rect) }
+                    .sans(15, .subheadline).foregroundStyle(pal.ink3)
+            }
             Spacer()
             HStack(spacing: 5) {
                 InkDrop(fill: Double(drops) / 10)
