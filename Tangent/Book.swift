@@ -93,7 +93,7 @@ struct BookView: View {
                         Text(counts[t], format: .number).serif(20, .title3, weight: .medium).monospacedDigit().foregroundStyle(pal.ink)
                         HStack(spacing: 5) {
                             RoundedRectangle(cornerRadius: 2).fill(Palette.solid[t]).frame(width: 7, height: 7)
-                            Text(Lexicon.tierNames[t]).label(9).lineLimit(1).minimumScaleFactor(0.8)
+                            Text(Lexicon.tierNames[t]).label(11).lineLimit(1)
                         }
                         .foregroundStyle(pal.ink3)
                     }

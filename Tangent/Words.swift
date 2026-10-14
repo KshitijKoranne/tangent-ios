@@ -131,7 +131,7 @@ struct WordButton: View {
         }
         .buttonStyle(WordStyle(color: pal.hl[tier], found: store.book[lemma] != nil))
         .modifier(ZoomSource(id: src, ns: zoom))
-        .accessibilityHint(store.book[lemma] == nil ? "New word" : "In your book")
+        .accessibilityValue(store.book[lemma] == nil ? "New" : "In your book").accessibilityHint("Opens its page")
     }
 }
 
@@ -143,7 +143,7 @@ private struct WordStyle: ButtonStyle {
             .band(color.opacity(found ? 1 : 0.5), found || c.isPressed ? 1 : 0)
             .scaleEffect(c.isPressed ? 0.96 : 1)
             .animation(c.isPressed ? .easeOut(duration: 0.08) : Motion.soft, value: c.isPressed)
-            .contentShape(Rectangle().inset(by: -4))
+            .contentShape(Rectangle().inset(by: -6))
     }
 }
 

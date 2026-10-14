@@ -346,7 +346,7 @@ struct StatusPills: View {
                         Text(store.book.count, format: .number).monospacedDigit()
                             .contentTransition(.numericText(value: Double(store.book.count)))
                     }
-                    .padding(.leading, 12).padding(.trailing, 10).frame(height: 36)
+                    .padding(.leading, 12).padding(.trailing, 10).frame(height: 44)
                 }
                 .accessibilityLabel("\(store.book.count) words in your book")
                 Rectangle().fill(pal.ink3.opacity(0.3)).frame(width: 1, height: 16)
@@ -355,7 +355,7 @@ struct StatusPills: View {
                         InkDrop(fill: n / store.cap).foregroundStyle(full < 1 ? Color(hex: 0xE0529A) : pal.ink)
                         Text("\(full)").monospacedDigit().contentTransition(.numericText(value: Double(full)))
                     }
-                    .padding(.leading, 10).padding(.trailing, 12).frame(height: 36)
+                    .padding(.leading, 10).padding(.trailing, 12).frame(height: 44)
                 }
                 .accessibilityLabel("Ink: \(full) of \(Int(store.cap)) drops")
             }
@@ -399,7 +399,7 @@ struct SpeakButton: View {
         Button { Voice.say(word); taps += 1 } label: {
             Image(systemName: "speaker.wave.2").font(.system(size: 15, weight: .medium))
                 .symbolEffect(.bounce, value: taps)
-                .frame(width: 40, height: 40)
+                .frame(width: 44, height: 44)
                 .foregroundStyle(pal.ink2)
         }
         .buttonStyle(.plain)

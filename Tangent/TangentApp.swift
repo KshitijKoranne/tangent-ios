@@ -28,7 +28,7 @@ struct RootView: View {
         .accessibilityHidden(!store.onboarded)
         .overlay {
             if !store.onboarded {
-                OnboardingView().modifier(Themed()).dynamicTypeSize(...DynamicTypeSize.accessibility2).transition(.opacity)
+                OnboardingView().modifier(Themed()).dynamicTypeSize(...DynamicTypeSize.accessibility3).transition(.opacity)
             }
         }
         .animation(.easeInOut(duration: 0.45), value: store.onboarded)
@@ -44,7 +44,7 @@ struct RootView: View {
             .modifier(Themed())
         }
         .sensoryFeedback(trigger: store.hapticTick) { _, _ in store.haptic }
-        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         .onChange(of: GameCenter.shared.state) { _, s in if s == .ready { GameCenter.shared.submit(store.book.count) } }
         .task { if store.joined { GameCenter.shared.start() } } // the sign-in prompt only follows a yes to "Join the Board"
     }
